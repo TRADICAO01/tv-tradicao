@@ -1,5 +1,5 @@
 const lista = [
-    "midia/oferta1.png",
+    "oferta1.png",
 ];
 
 let indice = 0;
