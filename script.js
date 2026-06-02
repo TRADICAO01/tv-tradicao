@@ -1,5 +1,6 @@
 const lista = [
     "oferta1.png",
+    "oferta2.png",
     "video1.mp4"
 ];
 
