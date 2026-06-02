@@ -1,5 +1,6 @@
 const lista = [
     "oferta1.png",
+    "video1.mp4"
 ];
 
 let indice = 0;
