@@ -2,7 +2,7 @@ const lista = [
     "oferta1.jpeg",
     "oferta2.jpeg",
     "oferta3.jpeg",
-    "oferta4.jpeg"
+    "oferta4.png"
 ];
 
 let indice = 0;
