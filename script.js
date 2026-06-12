@@ -3,7 +3,7 @@ const lista = [
     "IMG_0194.jpeg",
     "IMG_0195.jpeg",
     "IMG_0196.jpeg",
-    "IMG_0197.jpeg"
+    "IMG_0197.jpeg",
     "oferta4.png"
 ];
 
