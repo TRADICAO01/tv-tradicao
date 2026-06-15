@@ -1,6 +1,7 @@
 const lista = [
     "oferta1.jpeg",
-    "IMG_0199.jpeg",
+    "2b1ec8ad-6ccf-4d5f-bd66-a56a8b12f96e_06817D15-0924-4211-BBFB-9188E522017D.jpeg",
+    ""
     "oferta4.png"
 ];
 
