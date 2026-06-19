@@ -1,8 +1,6 @@
 const lista = [
     "0e81a825-e785-425f-b429-36b33106d6ed_D57B6FF6-02B8-410B-8B02-72DE423509CC.jpeg",
-    "6299c9cd-86d6-470e-8667-7b4e8a61bcdf.jpeg",
-    "73f53fb8-4bd1-4c54-8214-4832719186e4.jpeg",
-    "oferta4.png"
+ 
 ];
 
 let indice = 0;
