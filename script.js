@@ -1,7 +1,8 @@
 const lista = [
     "0e81a825-e785-425f-b429-36b33106d6ed_D57B6FF6-02B8-410B-8B02-72DE423509CC.jpeg",
-    "2cb5343f-ca80-42e3-b4ef-9134dcb3b003.jpeg"
-    "f0d48fd3-0616-4f6d-8c5b-83342e1cd672.jpeg"
+    "2cb5343f-ca80-42e3-b4ef-9134dcb3b003.jpeg",
+    "f0d48fd3-0616-4f6d-8c5b-83342e1cd672.jpeg",
+"f54a3835-4003-4f49-a716-fc248f860407.jpeg"
     
 ];
 
