@@ -1,7 +1,11 @@
 const lista = [
     "0e81a825-e785-425f-b429-36b33106d6ed_D57B6FF6-02B8-410B-8B02-72DE423509CC.jpeg",
-    "22dceef3-acb0-4358-9238-c0e2b0e46267.jpeg",
-    "eb56ed89-fa5a-4809-a8f4-d4393ad5ac6b.jpeg"
+    "3275127b-affd-49a3-a425-734cc2de5291.jpeg",
+    "91ade62b-9774-496b-8d35-e50d2149ad33.jpeg",
+    "b98dcbd3-8978-4126-b4fb-311190617444.jpeg",
+    "bff8cbdf-fde3-450f-a03f-c078990cad4d.jpeg",
+    "ecda9e4a-21a2-47b9-88f5-fd497788fdf9.jpeg"
+    
     ];
 
 let indice = 0;
