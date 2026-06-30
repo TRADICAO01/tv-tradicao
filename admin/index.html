@@ -44,13 +44,30 @@ button{
 
 <h2>TV Tradição</h2>
 
-<button>📷 Adicionar imagem</button>
+<input type="file" id="arquivo" accept="image/*" multiple hidden>
+
+<button onclick="document.getElementById('arquivo').click()">
+📷 Adicionar imagens
+</button>
 
 <button>📺 Escolher TV</button>
 
 <button>🚀 Publicar</button>
 
 </div>
+<script>
 
+const arquivo = document.getElementById("arquivo");
+
+arquivo.addEventListener("change", () => {
+
+    alert(
+        arquivo.files.length +
+        " imagem(ns) selecionada(s)."
+    );
+
+});
+
+</script>
 </body>
 </html>
