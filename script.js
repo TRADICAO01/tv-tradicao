@@ -1,39 +1,73 @@
-const lista = [
-    "0e81a825-e785-425f-b429-36b33106d6ed_D57B6FF6-02B8-410B-8B02-72DE423509CC.jpeg",
-    "oferta1.jpeg",
-    "oferta2.jpeg",
-    "oferta3.jpeg",
-    "oferta5.jpeg",
-    "oferta6.jpeg",
-    "oferta7.jpeg",
-    "oferta8.jpeg"
-    
-    ];
+const SUPABASE_URL = "https://bdlzvjksuutaebeqophb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_I1g-Cg1CtQO_O4q-9PzsVw_bfKj-avn";
 
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+let lista = [];
 let indice = 0;
 
 const img = document.getElementById("imagem");
 const video = document.getElementById("video");
 
+async function carregarLista() {
+    console.log("Entrou na carregarLista");
+
+    const { data, error } = await supabaseClient
+        .from("midias2")
+        .select("*")
+        .order("id", { ascending: true });
+        console.log("DATA:", data);
+console.log("ERROR:", error);
+
+    if (error) {
+        console.error("Erro:", error);
+        return;
+    }
+
+    lista = data.map(item => ({
+        arquivo: supabaseClient.storage
+            .from("midias")
+            .getPublicUrl(item.arquivo)
+            .data.publicUrl,
+
+        duracao: item.duracao || 10
+    }));
+
+window.lista = lista;
+console.log(lista);
+
+    if (lista.length === 0) {
+        console.log("Nenhuma mídia cadastrada.");
+        return;
+    }
+
+    mostrarMidia();
+}
+
 function mostrarMidia() {
 
-    const arquivo = lista[indice];
+    const item = lista[indice];
+    const arquivo = item.arquivo;
 
     if (
         arquivo.endsWith(".jpg") ||
+        arquivo.endsWith(".jpeg") ||
         arquivo.endsWith(".png") ||
-        arquivo.endsWith(".jpeg")
+        arquivo.endsWith(".webp")
     ) {
 
-        video.style.display = "none";
         video.pause();
+        video.style.display = "none";
 
         img.src = arquivo;
         img.style.display = "block";
 
         setTimeout(() => {
             proximo();
-        }, 10000);
+        }, item.duracao * 1000);
 
     } else {
 
@@ -61,4 +95,4 @@ function proximo() {
     mostrarMidia();
 }
 
-mostrarMidia();
+carregarLista();

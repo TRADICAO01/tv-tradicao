@@ -51,23 +51,120 @@ button{
 </button>
 
 <button>📺 Escolher TV</button>
+<div id="listaTVs" style="margin-top:20px;"></div>
 
-<button>🚀 Publicar</button>
+<button id="btnPublicar">🚀 Publicar</button>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+console.log("Script iniciou");
+const SUPABASE_URL = "https://bdlzvjksuutaebeqophb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_I1g-Cg1CtQO_O4q-9PzsVw_bfKj-avn";
+
+const clienteSupabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 const arquivo = document.getElementById("arquivo");
 
-arquivo.addEventListener("change", () => {
+arquivo.addEventListener("change", async () => {
+    console.log("Arquivo selecionado");
 
-    alert(
-        arquivo.files.length +
-        " imagem(ns) selecionada(s)."
-    );
+    if (arquivo.files.length === 0) return;
+
+    const file = arquivo.files[0];
+
+    const nomeArquivo = Date.now() + "_" + file.name;
+
+    const { error: uploadError } = await clienteSupabase.storage
+        .from("midias")
+        .upload(nomeArquivo, file);
+
+    if (uploadError) {
+        alert(uploadError.message);
+        return;
+    }
+
+const { data: novaMidia, error: bancoError } = await clienteSupabase
+    .from("midias2")
+.insert({
+    arquivo: nomeArquivo,
+    duracao: 10
+})
+    .select()
+    .single();
+
+window.ultimaMidiaId = novaMidia.id;
+
+console.log("Nova mídia:", novaMidia);
+
+    if (bancoError) {
+        alert(bancoError.message);
+        return;
+    }
+
+    alert("Imagem enviada com sucesso!");
 
 });
+async function carregarTVs() {
+console.log("carregarTVs iniciou");
+    const { data, error } = await clienteSupabase
+        .from("tvs")
+        .select("*")
+        .eq("ativa", true)
+        .order("nome");
+    console.log(data);
+    console.log(error);
 
+    if (error) {
+        console.log(error);
+        return;
+    }
+
+    const lista = document.getElementById("listaTVs");
+
+    lista.innerHTML = "";
+
+    data.forEach(tv => {
+
+        lista.innerHTML += `
+            <label style="display:block;margin:8px 0;">
+                <input type="checkbox" value="${tv.id}">
+                ${tv.nome}
+            </label>
+        `;
+
+    });
+
+}
+document.getElementById("btnPublicar").addEventListener("click", async () => {
+const tvsSelecionadas = [...document.querySelectorAll("#listaTVs input:checked")]
+    .map(x => Number(x.value));
+console.log("Última mídia:", window.ultimaMidiaId);
+for (const tvId of tvsSelecionadas) {
+    const { error } = await clienteSupabase
+        .from("publicacoes")
+        .insert({
+           midia_id: window.ultimaMidiaId,
+            tv_id: tvId
+        });
+
+if (error) {
+    console.log(error);
+    alert(error.message);
+    return;
+
+    }
+}
+
+alert("Publicado com sucesso!");
+
+});
+carregarTVs();
 </script>
 </body>
 </html>
