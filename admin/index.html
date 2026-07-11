@@ -96,8 +96,9 @@ arquivo.addEventListener("change", async () => {
 
     if (arquivo.files.length === 0) return;
 
-    const file = arquivo.files[0];
+    const files = [...arquivo.files];
 
+    for (const file of files) {
     const nomeArquivo = Date.now() + "_" + file.name;
 
     const { error: uploadError } = await clienteSupabase.storage
@@ -126,7 +127,7 @@ console.log("Nova mídia:", novaMidia);
         alert(bancoError.message);
         return;
     }
-
+}
     alert("Imagem enviada com sucesso!");
 
 });
