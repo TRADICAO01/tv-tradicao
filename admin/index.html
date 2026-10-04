@@ -120,6 +120,7 @@ const { data: novaMidia, error: bancoError } = await clienteSupabase
     .single();
 
 window.ultimaMidiaId = novaMidia.id;
+window.ultimasMidiasIds = [novaMidia.id];
 console.log("ID salvo:", window.ultimaMidiaId);
 console.log("Nova mídia:", novaMidia);
 
