@@ -90,7 +90,7 @@ const clienteSupabase = window.supabase.createClient(
 );
 
 const arquivo = document.getElementById("arquivo");
-
+window.ultimasMidiasIds = [];
 arquivo.addEventListener("change", async () => {
     console.log("Arquivo selecionado");
 
@@ -250,13 +250,30 @@ const tvsSelecionadas = [...document.querySelectorAll("#listaTVs input:checked")
 console.log("Última mídia:", window.ultimaMidiaId);
 for (const tvId of tvsSelecionadas) {
     console.log("TV:", tvId);
+
 console.log("MIDIA:", window.ultimaMidiaId);
-    const { error } = await clienteSupabase
-        .from("publicacoes")
-        .insert({
-           midia_id: window.ultimaMidiaId,
-            tv_id: tvId
-        });
+const publicacoes = [];
+
+for (const midiaId of window.ultimasMidiasIds) {
+    publicacoes.push({
+        midia_id: midiaId,
+        tv_id: tvId
+    });
+}
+const { error } = await clienteSupabase
+    .from("publicacoes")
+    .insert(publicacoes);
+
+if (error) {
+    console.log(error);
+    alert(error.message);
+    return;
+}
+
+
+
+}
+
 
 if (error) {
     console.log(error);
@@ -269,33 +286,44 @@ if (error) {
 alert("Publicado com sucesso!");
 carregarMidias();
 
-});
-async function excluirMidia(id, arquivo){
+async function excluirMidia(id, arquivo) {
+  console.log("ID RECEBIDO:", id);
+  console.log("ARQUIVO RECEBIDO:", arquivo);
 
-    console.log("ID RECEBIDO:", id);
+  if (!confirm("Excluir esta mídia?")) return;
 
-    if(!confirm("Excluir esta mídia?")) return;
+  // 1. Primeiro apaga o arquivo físico do Storage
+  const { error: storageError } = await clienteSupabase.storage
+    .from("midias")
+    .remove([arquivo]);
 
-    const r1 = await clienteSupabase.storage
-        .from("midias")
-        .remove([arquivo]);
+  console.log("STORAGE:", storageError);
 
-    console.log("STORAGE:", r1);
+  // Se o Storage não apagar, NÃO apaga o registro do banco
+  if (storageError) {
+    console.error("ERRO AO APAGAR STORAGE:", storageError);
+    alert("Não foi possível apagar o arquivo do Storage. O registro não será apagado.");
+    return;
+  }
 
-const r2 = await clienteSupabase
+  // 2. Só depois apaga o registro do banco
+  const { error: bancoError } = await clienteSupabase
     .from("midias2")
     .delete()
     .eq("id", id);
 
-console.log("BANCO:", r2);
+  console.log("BANCO:", bancoError);
 
-if (r2.error) {
-    alert(r2.error.message);
+  if (bancoError) {
+    console.error("ERRO AO APAGAR BANCO:", bancoError);
+    alert("O arquivo foi apagado do Storage, mas houve erro ao apagar o registro.");
+    return;
+  }
+
+  // 3. Atualiza a lista
+  alert("Mídia excluída com sucesso!");
+  await carregarMidias();
 }
-
-    await carregarMidias();
-}
-
 carregarTVs();
 carregarMidias();
 </script>
